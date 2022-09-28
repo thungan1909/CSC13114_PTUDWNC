@@ -200,12 +200,17 @@ render() {
   const winner = calculateWinner (current.squares);
 
   const moves = history.map((step, move) => {
+
+    //In đâm nut bước đi gần đây
+    let currentButton = (move === this.state.stepNumber ? 'currentButton' : '')
     const desc = move ?
     ' Go to move #' + move +" at (" + step.col + "," + step.row + ")":
     'Go to game start';
     return (
       <li key={move}>
-      <button onClick={() => this.jumpTo(move)}>{desc}</button>
+      <button 
+      className={currentButton}
+      onClick={() => this.jumpTo(move)}>{desc}</button>
       </li>
     );
   });
