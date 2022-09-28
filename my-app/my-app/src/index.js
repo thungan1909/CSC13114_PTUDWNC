@@ -155,6 +155,10 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+
+        // Khởi tạo biến col và row để lưu vị trí
+        col: null,
+        row: null
       }],
       stepNumber: 0,
       xIsNext: true, //XIsNext là biến boolean để xác định biến nào sẽ tiếp theo và trạng thái game sẽ được lưu
@@ -167,6 +171,8 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber +1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    // Khai báo biến coordinate để tìm toạ độ (x,y) của 1 ô thứ i
+    const coordinate = findCoordinate(i);
     if (calculateWinner(squares) || squares[i]) { //Kiểm tra nếu có người thắng hoặc nếu full rồi thì không click được nữa
       return;
     }
@@ -174,6 +180,9 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares : squares,
+        row: coordinate[0],
+        col: coordinate[1],
+        
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext, //X và O xoay vòng
@@ -182,7 +191,7 @@ class Game extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) ===0,
+      xIsNext: (step % 2) === 0,
     });
   }
 render() {
@@ -192,7 +201,7 @@ render() {
 
   const moves = history.map((step, move) => {
     const desc = move ?
-    ' Go to move #' + move :
+    ' Go to move #' + move +" at (" + step.col + "," + step.row + ")":
     'Go to game start';
     return (
       <li key={move}>
@@ -229,6 +238,50 @@ render() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Game />);
+  function findCoordinate (i) {
+    let row;
+    let col;
+    switch(i) {
+      case 0:
+      case 1:
+      case 2: 
+          row = 1; //nếu là ô thứ 0, 1, 2 thì là hàng 1
+          break;
+      case 3:
+      case 4:
+      case 5:
+          row = 2; //nếu là ô thứ 3, 4, 5 thì là hàng 2
+          break;
+      case 6:
+      case 7:
+      case 8:
+          row = 3;
+          break;
+      default:
+          break;
+    }
+
+    switch(i) {
+      case 0:
+      case 3:
+      case 6: 
+          col = 1; 
+          break;
+      case 1:
+      case 4:
+      case 7:
+          col = 2; 
+          break;
+      case 2:
+      case 5:
+      case 8:
+          col = 3;
+          break;
+      default:
+          break;
+    }
+    return [row,col];
+  }
 
   function calculateWinner(squares) {
     const lines = [
