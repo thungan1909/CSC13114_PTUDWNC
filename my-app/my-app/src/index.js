@@ -204,8 +204,8 @@ class Game extends React.Component {
 render() {
   const history = this.state.history;
   const current = history[this.state.stepNumber];
-  const winner = calculateWinner (current.squares);
-
+  const winner = calculateWinner (current.squares, this.state.stepNumber);
+ 
   const moves = history.map((step, move) => {
 
     //In đâm nut bước đi gần đây
@@ -224,7 +224,7 @@ render() {
   const reversedMoves = moves.slice().reverse()
   let status;
   if (winner) {
-    status ='Winner: ' + winner;
+    status ='Winner: ' + winner[0];
   }
   else {
     status = 'Next player: '+ (this.state.xIsNext ? 'X' : 'O');
@@ -341,7 +341,7 @@ root.render(<Game />);
     return [row,col];
   }
 
-  function calculateWinner(squares) {
+  function calculateWinner(squares, step) {
     const lines = [
       [0, 1, 2, 3, 4],
       [5, 6, 7, 8, 9],
@@ -365,6 +365,9 @@ root.render(<Game />);
         && squares[a] === squares[e]) {
         return squares[a];
       }
+    }
+    if (step === 26) {
+      return "IT'S A TIE! NO ONE WINS";
     }
     return null;
   }
