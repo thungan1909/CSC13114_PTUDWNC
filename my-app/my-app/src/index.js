@@ -161,6 +161,8 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true, //XIsNext là biến boolean để xác định biến nào sẽ tiếp theo và trạng thái game sẽ được lưu
+      SortNext: "asc",
+      
     };
   }
 
@@ -186,6 +188,12 @@ class Game extends React.Component {
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext, //X và O xoay vòng
     });
+  }
+  chooseSort(){
+    const sort = (this.state.SortNext === "desc") ? "asc" : "desc";
+    this.setState({
+        SortNext: sort,
+    })
   }
   jumpTo(step) {
     this.setState({
@@ -213,7 +221,7 @@ render() {
       </li>
     );
   });
-
+  const reversedMoves = moves.slice().reverse()
   let status;
   if (winner) {
     status ='Winner: ' + winner;
@@ -230,8 +238,14 @@ render() {
         />
       </div>
       <div className="game-info">
+
         <div>{status}</div>
-        <ol>{moves}</ol>
+
+        
+
+        <button onClick={() => this.chooseSort()}> The next sort is: {this.state.SortNext}</button>
+        <br></br>
+        <div className="step-buttons">{((this.state.SortNext === "desc") ? moves : reversedMoves)}</div>
       </div>
     </div>
   );
