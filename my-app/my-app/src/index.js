@@ -126,23 +126,22 @@ class Board extends React.Component {
     status = 'Winner: ' + winner;
   } else {
     status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O'); //Hiển thị X hay O ở câu Next player */
-  return (
+  
+    const squares = [];
+    let MaxCol = 0;
+    let row, col;
+    for (row = 0; row < 5; row ++) {
+      const boardRow = [];
+       for(col = 0; col < 5; col++) {
+        boardRow.push(<span key={MaxCol}> {this.renderSquare(MaxCol)}</span> )
+        MaxCol++;
+       }
+       squares.push(<div key={row} className ="board-row">{boardRow}</div>)
+    }
+  
+    return (
     <div>
-      <div className="board-row">
-        {this.renderSquare(0)}
-        {this.renderSquare(1)}
-        {this.renderSquare(2)}
-      </div>
-      <div className="board-row">
-        {this.renderSquare(3)}
-        {this.renderSquare(4)}
-        {this.renderSquare(5)}
-      </div>
-      <div className="board-row">
-        {this.renderSquare(6)}
-        {this.renderSquare(7)}
-        {this.renderSquare(8)}
-      </div>
+      {squares}
     </div>
   );
   }
@@ -202,14 +201,14 @@ render() {
   const moves = history.map((step, move) => {
 
     //In đâm nut bước đi gần đây
-    let currentButton = (move === this.state.stepNumber ? 'currentButton' : '')
+    let currentSelected = (move === this.state.stepNumber ? 'currentSelected' : '')
     const desc = move ?
     ' Go to move #' + move +" at (" + step.col + "," + step.row + ")":
     'Go to game start';
     return (
       <li key={move}>
       <button 
-      className={currentButton}
+      className={currentSelected}
       onClick={() => this.jumpTo(move)}>{desc}</button>
       </li>
     );
@@ -250,17 +249,37 @@ root.render(<Game />);
       case 0:
       case 1:
       case 2: 
-          row = 1; //nếu là ô thứ 0, 1, 2 thì là hàng 1
-          break;
       case 3:
       case 4:
-      case 5:
-          row = 2; //nếu là ô thứ 3, 4, 5 thì là hàng 2
+          row = 1; 
           break;
+      case 5:
       case 6:
       case 7:
       case 8:
+      case 9:
+          row = 2; 
+          break;
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+      case 14:
           row = 3;
+          break;
+      case 15:
+      case 16:
+      case 17:
+      case 18:
+      case 19:
+          row = 4;
+          break;
+      case 20:
+      case 21:
+      case 22:
+      case 23:
+      case 24:
+          row = 5;
           break;
       default:
           break;
@@ -268,19 +287,39 @@ root.render(<Game />);
 
     switch(i) {
       case 0:
-      case 3:
-      case 6: 
+      case 5:
+      case 10:
+      case 15:
+      case 20: 
           col = 1; 
           break;
       case 1:
-      case 4:
-      case 7:
+      case 6:
+      case 11:
+      case 16:
+      case 21:
           col = 2; 
           break;
       case 2:
-      case 5:
-      case 8:
+      case 7:
+      case 12:
+      case 17:
+      case 22:
           col = 3;
+          break;
+      case 3:
+      case 8:
+      case 13:
+      case 18:
+      case 23:
+          col = 4;
+          break;
+      case 4:
+      case 9:
+      case 14:
+      case 19:
+      case 24:
+          col = 5;
           break;
       default:
           break;
@@ -290,18 +329,26 @@ root.render(<Game />);
 
   function calculateWinner(squares) {
     const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
+      [0, 1, 2, 3, 4],
+      [5, 6, 7, 8, 9],
+      [10, 11, 12, 13, 14],
+      [15, 16, 17, 18, 19],
+      [20, 21, 22, 23, 24],
+      [0, 5, 10, 15, 20],
+      [1, 6, 11, 16, 21],
+      [2, 7, 12, 17, 22],
+      [3, 8, 13, 18, 23],
+      [4, 9, 14, 19, 24],
+      [0, 6, 12, 18, 24],
+      [4, 8, 12, 16, 20],
     ];
     for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      const [a, b, c, d, e] = lines[i];
+      if (squares[a] 
+        && squares[a] === squares[b]
+        && squares[a] === squares[c]
+        && squares[a] === squares[d] 
+        && squares[a] === squares[e]) {
         return squares[a];
       }
     }

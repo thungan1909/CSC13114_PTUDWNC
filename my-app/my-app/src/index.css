@@ -48,7 +48,7 @@ body {
   .game-info {
     margin-left: 20px;
   }
-  .currentButton {   
+  .currentSelected {   
     font-weight: bold;
     background-color: greenyellow;
   } 
